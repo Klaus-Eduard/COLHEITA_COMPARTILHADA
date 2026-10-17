@@ -1,0 +1,24 @@
+# Build
+target/
+out/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Segredos e configuração local
+.env
+*.local.yml
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# Backups do banco
+*.dump
