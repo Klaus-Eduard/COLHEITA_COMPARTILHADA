@@ -5,6 +5,8 @@ out/
 
 # Segredos e configuração local
 .env
+.env.local
+.neon
 *.local.yml
 
 # IDEs
@@ -22,3 +24,6 @@ Thumbs.db
 
 # Backups do banco
 *.dump
+
+# Ferramentas Node da CLI da Neon
+node_modules/
