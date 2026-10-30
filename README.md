@@ -2,7 +2,7 @@
 
 Site comunitário para divulgar **excedentes de alimentos** em Blumenau. Moradores e pequenos produtores anunciam doação ou venda; interessados encontram as ofertas por bairro e combinam a retirada pelo WhatsApp, fora do sistema.
 
-- **Produção:** _URL do Render (preencher após o primeiro deploy)_
+- **Produção:** https://colheita-compartilhada.onrender.com (health check: [`/actuator/health/liveness`](https://colheita-compartilhada.onrender.com/actuator/health/liveness)). No plano gratuito o app hiberna; o primeiro acesso pode levar cerca de 1 minuto.
 - **Specs:** [`docs/specs/`](docs/specs/README.md) — comece pelo README de lá.
 - **Diagramas:** [`docs/diagramas/`](docs/diagramas/) (draw.io)
 
