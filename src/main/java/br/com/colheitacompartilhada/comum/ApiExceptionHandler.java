@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -82,11 +83,21 @@ public class ApiExceptionHandler {
         return responder(ErroResposta.de(409, ex.getCodigo(), ex.getMessage()));
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    ResponseEntity<ErroResposta> credenciaisInvalidas(AuthenticationException ex) {
+        return responder(ErroResposta.de(401, "CREDENCIAIS_INVALIDAS", "E-mail ou senha inválidos."));
+    }
+
+    @ExceptionHandler(MuitasTentativasException.class)
+    ResponseEntity<ErroResposta> muitasTentativas(MuitasTentativasException ex) {
+        return responder(ErroResposta.de(429, "MUITAS_TENTATIVAS", ex.getMessage()));
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     ResponseEntity<ErroResposta> violacaoDeIntegridade(DataIntegrityViolationException ex) {
         String detalhe = String.valueOf(ex.getMostSpecificCause().getMessage());
         if (detalhe.contains("uq_usuario_email")) {
-            return responder(ErroResposta.de(409, "EMAIL_JA_CADASTRADO", "Este e-mail já está cadastrado."));
+            return responder(ErroResposta.de(409, "EMAIL_JA_CADASTRADO", "E-mail já cadastrado."));
         }
         if (detalhe.contains("uq_denuncia_aberta")) {
             return responder(ErroResposta.de(409, "DENUNCIA_DUPLICADA",

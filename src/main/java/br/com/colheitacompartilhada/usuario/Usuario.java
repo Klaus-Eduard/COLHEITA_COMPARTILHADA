@@ -1,6 +1,7 @@
 package br.com.colheitacompartilhada.usuario;
 
 import java.time.Instant;
+import java.util.Locale;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -50,6 +51,31 @@ public class Usuario {
     private Instant criadoEm;
 
     protected Usuario() {
+    }
+
+    public static Usuario criar(String nome, String email, String senhaHash, TipoParticipante tipo, Papel papel,
+            Instant agora) {
+        Usuario usuario = new Usuario();
+        usuario.nome = nome.trim();
+        usuario.email = email.trim().toLowerCase(Locale.ROOT);
+        usuario.senhaHash = senhaHash;
+        usuario.tipo = tipo;
+        usuario.papel = papel;
+        usuario.ativo = true;
+        usuario.criadoEm = agora;
+        return usuario;
+    }
+
+    public void bloquear() {
+        this.ativo = false;
+    }
+
+    public boolean podePublicar() {
+        return ativo && whatsapp != null && aceiteContatoEm != null;
+    }
+
+    public boolean isAdmin() {
+        return papel == Papel.ADMIN;
     }
 
     public UUID getId() {

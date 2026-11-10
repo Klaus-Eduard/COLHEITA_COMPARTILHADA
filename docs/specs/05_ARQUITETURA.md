@@ -34,9 +34,9 @@ colheita-compartilhada/
 └─ src/
    ├─ main/java/br/com/colheitacompartilhada/
    │  ├─ ColheitaApplication.java
-   │  ├─ config/        SecurityConfig, AtivoCheckFilter, ClockConfig, AdminBootstrap, DemoDataLoader
-   │  ├─ comum/         ApiExceptionHandler, ErroResposta, Pagina, exceções (RegraNegocio, EstadoInvalido, NaoEncontrado, AcessoNegado, Conflito)
-   │  ├─ usuario/       Usuario, Papel, TipoParticipante, UsuarioRepository, UsuarioService,
+   │  ├─ config/        SecurityConfig, AtivoCheckFilter, ErroJsonWriter, ClockConfig, AdminBootstrap, DemoDataLoader
+   │  ├─ comum/         ApiExceptionHandler, ErroResposta, Pagina, exceções (RegraNegocio, EstadoInvalido, NaoEncontrado, AcessoNegado, Conflito, MuitasTentativas)
+   │  ├─ usuario/       Usuario, Papel, TipoParticipante, UsuarioRepository, UsuarioService, SessaoService,
    │  │                 UsuarioAutenticado (UserDetails), UsuarioDetailsService, LoginRateLimiter,
    │  │                 AuthController (/usuarios, /sessao, /csrf), PerfilController (/me, /me/anuncios), dto/
    │  ├─ catalogo/      Bairro, Categoria, repositórios, CatalogoController
@@ -91,8 +91,9 @@ SecurityFilterChain api(HttpSecurity http, UsuarioRepository usuarios) throws Ex
     return http.build();
 }
 ```
-- **Login (`POST /sessao`)**: `LoginRateLimiter.verificar(email)` → `authenticationManager.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(email, senha))` → criar `SecurityContext` → `request.getSession(true)`; `request.changeSessionId()` (contra fixação de sessão) → `HttpSessionSecurityContextRepository.saveContext(...)`. Qualquer `AuthenticationException` (inclusive `DisabledException`) → `rateLimiter.registrarFalha(email)` + 401 CREDENCIAIS_INVALIDAS.
+- **Login (`POST /sessao`)** — implementado em `SessaoService` (o controller só repassa): `LoginRateLimiter.verificar(email)` → `authenticationManager.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(email, senha))` → criar `SecurityContext` → `request.getSession(true)`; `request.changeSessionId()` (contra fixação de sessão) → `HttpSessionSecurityContextRepository.saveContext(...)`. Qualquer `AuthenticationException` (inclusive `DisabledException`) → `rateLimiter.registrarFalha(email)` + 401 CREDENCIAIS_INVALIDAS.
 - **UsuarioAutenticado** implementa `UserDetails`: `id`, `email`, `senhaHash`, `papel` → `ROLE_USUARIO`/`ROLE_ADMIN`, `isEnabled() = ativo`. Nos controllers: `@AuthenticationPrincipal UsuarioAutenticado eu`.
+- **401/403 fora dos controllers** (entry point, CSRF inválido, `AtivoCheckFilter`): escritos por `ErroJsonWriter`, no mesmo formato `ErroResposta`.
 - **AtivoCheckFilter** (RN13): se houver usuário autenticado e `!usuarios.existsByIdAndAtivoTrue(id)` → invalida a sessão, limpa o contexto e responde 401 JSON.
 - **LoginRateLimiter**: `ConcurrentHashMap<String, Deque<Instant>>` por e-mail em minúsculas; 5 falhas em 15 min → 429. Usa `Clock`. Funciona porque há uma única instância (D15).
 - **Senha**: `PasswordEncoderFactories.createDelegatingPasswordEncoder()` (BCrypt).
@@ -112,6 +113,8 @@ SecurityFilterChain api(HttpSecurity http, UsuarioRepository usuarios) throws Ex
 | `AcessoNegadoException` | 403 |
 | `EstadoInvalidoException(statusAtual)` | 409 ESTADO_INVALIDO |
 | `ConflitoException(codigo)` e `DataIntegrityViolationException` de `uq_usuario_email` ou `uq_denuncia_aberta` | 409 com o código correspondente |
+| `AuthenticationException` (Spring Security, lançada no login) | 401 CREDENCIAIS_INVALIDAS |
+| `MuitasTentativasException` | 429 MUITAS_TENTATIVAS |
 | `MaxUploadSizeExceededException` | 413 |
 | `Exception` | 500 + `log.error` com stack trace |
 
