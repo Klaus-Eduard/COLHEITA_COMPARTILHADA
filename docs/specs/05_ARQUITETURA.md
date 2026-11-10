@@ -39,7 +39,7 @@ colheita-compartilhada/
    │  ├─ usuario/       Usuario, Papel, TipoParticipante, UsuarioRepository, UsuarioService, SessaoService,
    │  │                 UsuarioAutenticado (UserDetails), UsuarioDetailsService, LoginRateLimiter,
    │  │                 AuthController (/usuarios, /sessao, /csrf), PerfilController (/me, /me/anuncios), dto/
-   │  ├─ catalogo/      Bairro, Categoria, repositórios, CatalogoController
+   │  ├─ catalogo/      Bairro, Categoria, repositórios, CatalogoService, CatalogoController, dto/
    │  ├─ anuncio/       Anuncio, enums, AnuncioRepository, AnuncioSpecs, AnuncioService, AnuncioController,
    │  │                 ExpiracaoJob, Foto, FotoRepository, FotoService, FotoController, dto/
    │  └─ denuncia/      Denuncia, StatusDenuncia, DenunciaRepository, DenunciaService,
