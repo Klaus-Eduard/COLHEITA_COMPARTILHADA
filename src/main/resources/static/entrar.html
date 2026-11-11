@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrar - Colheita Compartilhada</title>
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+  <a class="pular" href="#principal">Ir para o conteúdo</a>
+  <header id="topo"></header>
+  <main id="principal" class="auth">
+    <section class="auth__marca">
+      <span class="auth__selo">Blumenau · SC</span>
+      <p class="auth__lema">Do quintal para quem mora perto.</p>
+      <p class="auth__texto">Divulgue o que sobrou da horta ou da pequena produção e encontre alimentos no seu bairro.</p>
+      <ul class="auth__lista">
+        <li>Doe ou venda frutas, verduras, legumes, ovos e mel</li>
+        <li>Busque por bairro e combine a retirada pelo WhatsApp</li>
+        <li>Sem carrinho e sem taxas: a conversa é entre vizinhos</li>
+      </ul>
+      <svg class="auth__ilustracao" viewBox="0 0 360 260" aria-hidden="true" focusable="false">
+        <ellipse cx="180" cy="236" rx="140" ry="14" fill="#000" opacity=".18"/>
+        <path d="M120 120C100 60 150 30 170 80C160 100 140 115 120 120Z" fill="#7fb77e"/>
+        <path d="M240 118C265 55 215 28 195 78C205 100 225 114 240 118Z" fill="#5fa36b"/>
+        <circle cx="150" cy="128" r="30" fill="#c8452f"/>
+        <path d="M150 98l-8-10m8 10l8-10m-8 10v-12" stroke="#2f7a4a" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <circle cx="215" cy="124" r="28" fill="#e3a72f"/>
+        <circle cx="183" cy="112" r="26" fill="#8e2c48"/>
+        <ellipse cx="108" cy="140" rx="14" ry="18" fill="#f6f0dc"/>
+        <ellipse cx="258" cy="142" rx="14" ry="18" fill="#efe3c2"/>
+        <path d="M72 144H288L262 226Q260 234 250 234H110Q100 234 98 226Z" fill="#b07a45"/>
+        <path d="M82 168H278M90 192H270M98 214H262" stroke="#8f5f33" stroke-width="5" stroke-linecap="round"/>
+        <path d="M120 144V234M160 144V234M200 144V234M240 144V234" stroke="#8f5f33" stroke-width="3" opacity=".6"/>
+        <rect x="66" y="134" width="228" height="16" rx="8" fill="#9a6a38"/>
+      </svg>
+    </section>
+    <section class="auth__form">
+      <div class="auth__caixa">
+        <h1>Bem-vindo de volta</h1>
+        <p class="auth__intro">Entre para anunciar e pedir contato.</p>
+        <div id="mensagem-ok" class="mensagem" aria-live="polite"></div>
+        <div id="mensagem-erro" class="mensagem" role="alert"></div>
+        <form id="form" novalidate>
+          <div class="campo">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" autocomplete="email" maxlength="254" required aria-describedby="erro-email">
+            <span id="erro-email" class="erro"></span>
+          </div>
+          <div class="campo">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" autocomplete="current-password" maxlength="72" required aria-describedby="erro-senha">
+            <span id="erro-senha" class="erro"></span>
+          </div>
+          <button class="botao" type="submit" id="enviar">Entrar</button>
+        </form>
+        <p class="troca">Ainda não tem conta? <a href="cadastro.html">Cadastrar</a></p>
+      </div>
+    </section>
+  </main>
+  <footer id="rodape"></footer>
+  <script type="module" src="js/paginas/entrar.js"></script>
+</body>
+</html>
