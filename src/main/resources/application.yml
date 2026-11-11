@@ -1,0 +1,38 @@
+spring:
+  config.import: optional:file:.env[.properties]
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 0
+      idle-timeout: 60000
+      max-lifetime: 300000
+  jpa:
+    open-in-view: false
+    hibernate.ddl-auto: validate
+    properties.hibernate.jdbc.time_zone: UTC
+  flyway.enabled: true
+  servlet.multipart:
+    max-file-size: 2MB
+    max-request-size: 3MB
+server:
+  port: ${PORT:8080}
+  forward-headers-strategy: framework
+  tomcat.max-swallow-size: 10MB
+  servlet.session:
+    timeout: 2h
+    cookie:
+      http-only: true
+      same-site: lax
+      secure: ${COOKIE_SECURE:true}
+management:
+  endpoints.web.exposure.include: health
+  endpoint.health.probes.enabled: true
+app:
+  expiracao-intervalo: ${APP_EXPIRACAO_INTERVALO:PT1H}
+  admin:
+    email: ${ADMIN_EMAIL:}
+    senha: ${ADMIN_PASSWORD:}
+    nome: ${ADMIN_NOME:Administrador}
