@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anúncio - Colheita Compartilhada</title>
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+  <a class="pular" href="#principal">Ir para o conteúdo</a>
+  <header id="topo"></header>
+  <main id="principal" class="conteudo">
+    <p><a class="link-voltar" href="index.html">&larr; Voltar à busca</a></p>
+    <div id="estado" class="estado"><p>Carregando anúncio…</p></div>
+
+    <article id="detalhe" class="detalhe" hidden>
+      <div class="detalhe__foto"><img id="foto" src="img/placeholder.svg" alt=""></div>
+      <div class="detalhe__info">
+        <p class="card__preco"><span id="selo" class="selo"></span><span id="preco" class="preco-grande"></span></p>
+        <h1 id="titulo"></h1>
+        <dl class="fatos">
+          <dt>Categoria</dt><dd id="categoria"></dd>
+          <dt>Bairro</dt><dd id="bairro"></dd>
+          <dt>Quantidade</dt><dd id="quantidade"></dd>
+          <dt>Disponível até</dt><dd id="disponivel"></dd>
+          <dt id="rotulo-validade" hidden>Validade do alimento</dt><dd id="validade" hidden></dd>
+          <dt>Anunciante</dt><dd id="anunciante"></dd>
+        </dl>
+        <div id="acoes" class="detalhe__acoes"></div>
+        <div id="painel-contato" class="painel-contato" hidden>
+          <p>WhatsApp do anunciante</p>
+          <p id="numero" class="numero"></p>
+          <div class="detalhe__acoes">
+            <a id="abrir-whatsapp" class="botao botao--auto" target="_blank" rel="noopener">Abrir WhatsApp</a>
+            <button id="copiar" type="button" class="botao botao--secundario botao--auto">Copiar número</button>
+          </div>
+          <p id="copiado" aria-live="polite"></p>
+        </div>
+        <div class="mensagens-detalhe">
+          <div id="msg-ok" class="mensagem" aria-live="polite"></div>
+          <div id="msg-erro" class="mensagem" role="alert"></div>
+        </div>
+      </div>
+      <div class="detalhe__texto">
+        <section aria-labelledby="h-descricao"><h2 id="h-descricao">Descrição</h2><p id="descricao"></p></section>
+        <section aria-labelledby="h-conservacao"><h2 id="h-conservacao">Conservação</h2><p id="conservacao"></p></section>
+        <section id="declaradas" class="declaradas" aria-labelledby="h-declaradas" hidden>
+          <h2 id="h-declaradas">Informações declaradas</h2>
+          <dl class="fatos">
+            <dt>Origem</dt><dd id="origem"></dd>
+            <dt>Validade</dt><dd id="validade-animal"></dd>
+            <dt>Inspeção</dt><dd id="inspecao"></dd>
+          </dl>
+          <p class="nota-info">As informações são declaradas pelo anunciante e não certificam o alimento.</p>
+        </section>
+        <p class="aviso-rn12">O Colheita Compartilhada apenas divulga anúncios. Negociação, retirada e conservação são responsabilidade de anunciante e interessado.</p>
+      </div>
+    </article>
+
+    <dialog id="dialogo-denuncia" aria-labelledby="titulo-dialogo">
+      <h2 id="titulo-dialogo">Denunciar anúncio</h2>
+      <div id="dialogo-erro" class="mensagem" role="alert"></div>
+      <form id="form-denuncia" novalidate>
+        <div class="campo">
+          <label for="motivo">Qual é o problema com este anúncio?</label>
+          <textarea id="motivo" name="motivo" maxlength="500" required aria-describedby="contador erro-motivo"></textarea>
+          <p id="contador" class="dica contador">0/500 (mínimo 10)</p>
+          <span id="erro-motivo" class="erro"></span>
+        </div>
+        <div class="dialogo__acoes">
+          <button type="button" id="cancelar-denuncia" class="botao botao--secundario">Cancelar</button>
+          <button type="submit" id="enviar-denuncia" class="botao">Enviar denúncia</button>
+        </div>
+      </form>
+    </dialog>
+  </main>
+  <footer id="rodape"></footer>
+  <script type="module" src="js/paginas/anuncio.js"></script>
+</body>
+</html>
