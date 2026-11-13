@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Colheita Compartilhada - Excedentes de alimentos em Blumenau</title>
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+  <a class="pular" href="#resultados">Ir para os anúncios</a>
+  <header id="topo"></header>
+  <main id="principal">
+    <section class="hero">
+      <div class="hero__interno">
+        <div>
+          <span class="auth__selo">Blumenau · SC</span>
+          <h1>Do quintal para quem mora perto.</h1>
+          <p>Doe ou venda o que sobrou da horta e da pequena produção, e encontre alimentos no seu bairro. A retirada é combinada direto pelo WhatsApp.</p>
+          <div class="hero__acoes">
+            <a class="botao botao--claro botao--auto" href="#form-busca">Buscar alimentos</a>
+            <a class="botao botao--contorno botao--auto" href="anuncio-form.html">Anunciar meu excedente</a>
+          </div>
+        </div>
+        <svg class="hero__ilustracao" viewBox="0 0 360 260" aria-hidden="true" focusable="false">
+        <ellipse cx="180" cy="236" rx="140" ry="14" fill="#000" opacity=".18"/>
+        <path d="M120 120C100 60 150 30 170 80C160 100 140 115 120 120Z" fill="#7fb77e"/>
+        <path d="M240 118C265 55 215 28 195 78C205 100 225 114 240 118Z" fill="#5fa36b"/>
+        <circle cx="150" cy="128" r="30" fill="#c8452f"/>
+        <path d="M150 98l-8-10m8 10l8-10m-8 10v-12" stroke="#2f7a4a" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <circle cx="215" cy="124" r="28" fill="#e3a72f"/>
+        <circle cx="183" cy="112" r="26" fill="#8e2c48"/>
+        <ellipse cx="108" cy="140" rx="14" ry="18" fill="#f6f0dc"/>
+        <ellipse cx="258" cy="142" rx="14" ry="18" fill="#efe3c2"/>
+        <path d="M72 144H288L262 226Q260 234 250 234H110Q100 234 98 226Z" fill="#b07a45"/>
+        <path d="M82 168H278M90 192H270M98 214H262" stroke="#8f5f33" stroke-width="5" stroke-linecap="round"/>
+        <path d="M120 144V234M160 144V234M200 144V234M240 144V234" stroke="#8f5f33" stroke-width="3" opacity=".6"/>
+        <rect x="66" y="134" width="228" height="16" rx="8" fill="#9a6a38"/>
+      </svg>
+      </div>
+    </section>
+
+    <section class="busca" aria-label="Buscar anúncios">
+      <form id="form-busca" class="busca__caixa" novalidate>
+        <div class="campo campo--texto">
+          <label for="texto">O que você procura?</label>
+          <input type="search" id="texto" name="texto" maxlength="100" placeholder="Ex.: laranja, ovos, mel">
+        </div>
+        <div class="campo">
+          <label for="bairroId">Bairro</label>
+          <select id="bairroId" name="bairroId"><option value="">Todos os bairros</option></select>
+        </div>
+        <div class="campo">
+          <label for="categoriaId">Categoria</label>
+          <select id="categoriaId" name="categoriaId"><option value="">Todas as categorias</option></select>
+        </div>
+        <div class="campo">
+          <label for="modalidade">Modalidade</label>
+          <select id="modalidade" name="modalidade">
+            <option value="">Todas</option>
+            <option value="DOACAO">Doação</option>
+            <option value="VENDA">Venda</option>
+          </select>
+        </div>
+        <div class="busca__acoes">
+          <button type="submit" class="botao botao--auto">Buscar</button>
+          <button type="button" id="limpar" class="botao botao--secundario botao--auto">Limpar filtros</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="resultados" class="resultados" aria-labelledby="titulo-resultados">
+      <div class="resultados__topo">
+        <h2 id="titulo-resultados" tabindex="-1">Anúncios disponíveis</h2>
+        <p id="resumo" class="resumo" aria-live="polite"></p>
+      </div>
+      <div id="estado" class="estado" hidden></div>
+      <ul id="lista" class="cards"></ul>
+      <nav id="paginacao" class="paginacao" aria-label="Paginação" hidden></nav>
+    </section>
+  </main>
+  <footer id="rodape"></footer>
+  <script type="module" src="js/paginas/index.js"></script>
+</body>
+</html>
