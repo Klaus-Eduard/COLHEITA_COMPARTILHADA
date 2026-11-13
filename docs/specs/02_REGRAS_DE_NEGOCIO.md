@@ -138,10 +138,10 @@ WHERE status = 'ATIVO' AND expira_em <= now();
 | anuncio.preco | RN03 | "Doação não tem preço." / "O preço deve ser maior que zero." / "Use no máximo 2 casas decimais e até 99.999.999,99." |
 | anuncio.conservacao | Entre 1 e 300 caracteres | "Informe como o alimento deve ser conservado." |
 | anuncio.validadeAlimento | RN05, RN07 | "Informe a validade." / "A validade já passou." |
-| anuncio.origemProduto | RN05; até 200 caracteres | "Informe a origem do produto." |
-| anuncio.inspecao | RN05; até 200 caracteres | "Informe a identificação da inspeção." |
+| anuncio.origemProduto | RN05; até 200 caracteres | "Informe a origem do produto." / "A origem deve ter até 200 caracteres." |
+| anuncio.inspecao | RN05; até 200 caracteres | "Informe a identificação da inspeção." / "A inspeção deve ter até 200 caracteres." |
 | anuncio.disponivelAte | RN07 | "Escolha uma data entre hoje e 7 dias." / "Não pode passar da validade." |
 | anuncio.excedenteDeclarado | Deve ser `true` | "Confirme que é excedente próprio." |
-| encerramento.resultado | RN09 | "O resultado não combina com a modalidade do anúncio." |
+| encerramento.resultado | RN09 | "Selecione o resultado." / "O resultado não combina com a modalidade do anúncio." |
 | denuncia.motivo | Entre 10 e 500 caracteres | "Descreva o motivo (mínimo 10 caracteres)." |
 | denuncia.decisao | Entre 1 e 500 caracteres | "Registre a decisão." |

@@ -5,8 +5,12 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 
-/** Relógio dos testes: começa no horário real e pode ser adiantado para simular a passagem do tempo. */
+/**
+ * Relógio dos testes: começa no horário real e pode ser adiantado para simular a passagem do tempo.
+ * Mesma precisão de microssegundos do relógio da aplicação (ClockConfig).
+ */
 public class RelogioAjustavel extends Clock {
 
     private Duration adiantado = Duration.ZERO;
@@ -21,7 +25,7 @@ public class RelogioAjustavel extends Clock {
 
     @Override
     public Instant instant() {
-        return Instant.now().plus(adiantado);
+        return Instant.now().plus(adiantado).truncatedTo(ChronoUnit.MICROS);
     }
 
     @Override

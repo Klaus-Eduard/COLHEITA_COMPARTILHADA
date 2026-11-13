@@ -4,6 +4,7 @@ import java.text.Collator;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,14 @@ public class CatalogoService {
     public CatalogoService(CategoriaRepository categorias, BairroRepository bairros) {
         this.categorias = categorias;
         this.bairros = bairros;
+    }
+
+    public Optional<Categoria> categoria(Long id) {
+        return categorias.findById(id);
+    }
+
+    public Optional<Bairro> bairro(Long id) {
+        return bairros.findById(id);
     }
 
     public List<Categoria> listarCategorias() {

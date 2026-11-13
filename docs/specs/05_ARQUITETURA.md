@@ -175,7 +175,7 @@ app:
 - **Banco de dev:** cada integrante cria uma **branch do Neon** (`dev-klaus`, `dev-luan`, `dev-isabele`) a partir de `main`, sem instalar nada; ou usa um PostgreSQL 16 local. **Nunca desenvolver contra o banco de produção.**
 - **AdminBootstrap** (`ApplicationRunner`): se `ADMIN_EMAIL` e `ADMIN_PASSWORD` estiverem definidos e o e-mail não existir, cria o usuário com `papel = ADMIN`, `tipo = MORADOR` e `ativo = true`. Registra no log apenas "Administrador inicial criado".
 - **DemoDataLoader** (`@Profile("demo")`): se não houver anúncios, cria 2 usuários fictícios (senha = `DEMO_PASSWORD`) e cerca de 6 anúncios variados, com `disponivelAte` relativo a "hoje", para nunca nascerem vencidos.
-- `ClockConfig`: `@Bean Clock clock() { return Clock.systemUTC(); }`. Fuso de negócio = constante `America/Sao_Paulo`. **Não depender do fuso do servidor** (o container roda em UTC).
+- `ClockConfig`: `@Bean Clock clock() { return Clock.tick(Clock.systemUTC(), Duration.ofNanos(1_000)); }` (precisão de microssegundos, igual à do `timestamptz`: o instante que a API devolve é o mesmo que fica gravado). `ClockConfig.hoje(clock)` dá a data de hoje em São Paulo. Fuso de negócio = constante `America/Sao_Paulo`. **Não depender do fuso do servidor** (o container roda em UTC).
 
 ## 8. Expiração
 `@EnableScheduling` + `ExpiracaoJob.@Scheduled(fixedDelayString = "${app.expiracao-intervalo}", initialDelayString = "PT1M")` → `anuncioRepository.expirarVencidos(Instant.now(clock))` (UPDATE em lote). O log registra a quantidade de anúncios expirados.
