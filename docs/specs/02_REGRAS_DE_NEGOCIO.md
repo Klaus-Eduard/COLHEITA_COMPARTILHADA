@@ -132,15 +132,16 @@ WHERE status = 'ATIVO' AND expira_em <= now();
 | anuncio.descricao | Entre 10 e 1000 caracteres, sem os espaços das pontas | "A descrição deve ter de 10 a 1000 caracteres." |
 | anuncio.categoriaId | ID existente | "Selecione a categoria." |
 | anuncio.bairroId | ID existente | "Selecione o bairro." |
-| anuncio.quantidade | RN06 | "Informe uma quantidade maior que zero." / "Para esta unidade, use número inteiro." |
+| anuncio.quantidade | RN06 | "Informe uma quantidade maior que zero." / "Para esta unidade, use número inteiro." / "Use no máximo 3 casas decimais e até 9.999.999,999." |
 | anuncio.unidade | Enum | "Selecione a unidade." |
 | anuncio.modalidade | Enum | "Selecione doação ou venda." |
-| anuncio.preco | RN03 | "Doação não tem preço." / "O preço deve ser maior que zero." |
+| anuncio.preco | RN03 | "Doação não tem preço." / "O preço deve ser maior que zero." / "Use no máximo 2 casas decimais e até 99.999.999,99." |
 | anuncio.conservacao | Entre 1 e 300 caracteres | "Informe como o alimento deve ser conservado." |
 | anuncio.validadeAlimento | RN05, RN07 | "Informe a validade." / "A validade já passou." |
 | anuncio.origemProduto | RN05; até 200 caracteres | "Informe a origem do produto." |
 | anuncio.inspecao | RN05; até 200 caracteres | "Informe a identificação da inspeção." |
 | anuncio.disponivelAte | RN07 | "Escolha uma data entre hoje e 7 dias." / "Não pode passar da validade." |
 | anuncio.excedenteDeclarado | Deve ser `true` | "Confirme que é excedente próprio." |
+| encerramento.resultado | RN09 | "O resultado não combina com a modalidade do anúncio." |
 | denuncia.motivo | Entre 10 e 500 caracteres | "Descreva o motivo (mínimo 10 caracteres)." |
 | denuncia.decisao | Entre 1 e 500 caracteres | "Registre a decisão." |
