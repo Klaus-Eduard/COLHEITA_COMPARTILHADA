@@ -36,6 +36,16 @@ public class Foto {
     protected Foto() {
     }
 
+    public static Foto criar(UUID anuncioId, String tipo, byte[] conteudo, Instant agora) {
+        Foto foto = new Foto();
+        foto.anuncioId = anuncioId;
+        foto.tipo = tipo;
+        foto.tamanho = conteudo.length;
+        foto.conteudo = conteudo;
+        foto.criadoEm = agora;
+        return foto;
+    }
+
     public UUID getId() {
         return id;
     }

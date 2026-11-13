@@ -7,6 +7,7 @@ import java.util.UUID;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -19,6 +20,13 @@ public interface AnuncioRepository extends JpaRepository<Anuncio, UUID>, JpaSpec
 
     @EntityGraph(attributePaths = {"categoria", "bairro", "usuario"})
     Page<Anuncio> findByUsuarioIdOrderByCriadoEmDesc(UUID usuarioId, Pageable pageable);
+
+    @Override
+    @EntityGraph(attributePaths = {"categoria", "bairro", "usuario"})
+    Page<Anuncio> findAll(Specification<Anuncio> criterios, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"categoria", "bairro", "usuario"})
+    Optional<Anuncio> findComAssociacoesById(UUID id);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select a from Anuncio a where a.id = :id")
