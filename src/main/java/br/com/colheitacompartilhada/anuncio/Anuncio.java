@@ -176,6 +176,15 @@ public class Anuncio {
                 && usuario.getAceiteContatoEm() != null;
     }
 
+    // Cada foto nova tem um id novo, então a URL muda e o navegador não mostra a foto antiga do cache.
+    public void atribuirFoto(UUID fotoId) {
+        this.fotoUrl = "/fotos/" + fotoId;
+    }
+
+    public void removerFoto() {
+        this.fotoUrl = null;
+    }
+
     public boolean pertenceA(UUID usuarioId) {
         return usuario.getId().equals(usuarioId);
     }
