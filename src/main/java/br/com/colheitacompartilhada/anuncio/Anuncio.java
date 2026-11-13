@@ -189,8 +189,13 @@ public class Anuncio {
         return usuario.getId().equals(usuarioId);
     }
 
+    /** RN09.2: editar e encerrar só valem para anúncio ATIVO e ainda no prazo. */
+    public boolean podeSerAlterado(Instant agora) {
+        return status == StatusAnuncio.ATIVO && expiraEm.isAfter(agora);
+    }
+
     private void exigirAtivoENaoVencido(Instant agora) {
-        if (status != StatusAnuncio.ATIVO || !expiraEm.isAfter(agora)) {
+        if (!podeSerAlterado(agora)) {
             throw estadoInvalido("O anúncio não está mais ativo.");
         }
     }
