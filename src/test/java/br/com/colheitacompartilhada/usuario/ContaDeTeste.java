@@ -1,5 +1,6 @@
 package br.com.colheitacompartilhada.usuario;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -57,6 +58,21 @@ public final class ContaDeTeste {
         MockHttpSession sessao = new MockHttpSession();
         entrar(mvc, sessao, email, SENHA).andExpect(status().isOk());
         return sessao;
+    }
+
+    public static ResultActions atualizarPerfil(MockMvc mvc, MockHttpSession sessao, String json) throws Exception {
+        return mvc.perform(patch("/me").with(csrf()).session(sessao).contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+    }
+
+    public static void autorizarContato(MockMvc mvc, MockHttpSession sessao) throws Exception {
+        atualizarPerfil(mvc, sessao, perfilJson("(47) 99999-8888", true)).andExpect(status().isOk());
+    }
+
+    public static String perfilJson(String whatsapp, boolean aceiteContato) {
+        String numero = whatsapp == null ? "null" : "\"" + whatsapp + "\"";
+        return "{\"nome\":\"Ana Souza\",\"tipo\":\"MORADOR\",\"whatsapp\":%s,\"aceiteContato\":%s}"
+                .formatted(numero, aceiteContato);
     }
 
     public static String cadastroJson(String nome, String email, String senha) {

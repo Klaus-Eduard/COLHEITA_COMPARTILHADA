@@ -6,6 +6,7 @@ import java.util.UUID;
 import br.com.colheitacompartilhada.comum.ConflitoException;
 import br.com.colheitacompartilhada.comum.NaoEncontradoException;
 import br.com.colheitacompartilhada.usuario.dto.CadastroRequest;
+import br.com.colheitacompartilhada.usuario.dto.PerfilRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +39,14 @@ public class UsuarioService {
         }
         criar(nome, email, senha, TipoParticipante.MORADOR, Papel.ADMIN);
         return true;
+    }
+
+    @Transactional
+    public Usuario atualizarPerfil(UUID id, PerfilRequest dados) {
+        Usuario usuario = buscar(id);
+        String whatsapp = Whatsapp.normalizar(dados.whatsapp());
+        usuario.atualizarPerfil(dados.nome(), dados.tipo(), whatsapp, dados.aceiteContato(), clock.instant());
+        return usuario;
     }
 
     @Transactional(readOnly = true)
