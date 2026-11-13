@@ -14,8 +14,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.test.util.ReflectionTestUtils;
 
 /**
- * Objetos prontos para os testes unitários do anúncio. Usa reflexão onde a entidade ainda não tem
- * método público para chegar ao estado desejado (catálogo vem só de migração; perfil é a issue 5).
+ * Objetos prontos para os testes unitários do anúncio. Usa reflexão só para o catálogo e o id,
+ * que na aplicação vêm do banco.
  */
 final class Fixtures {
 
@@ -27,8 +27,7 @@ final class Fixtures {
 
     static Usuario anunciante() {
         Usuario usuario = usuarioSemContato();
-        ReflectionTestUtils.setField(usuario, "whatsapp", "5547999998888");
-        ReflectionTestUtils.setField(usuario, "aceiteContatoEm", AGORA.minusSeconds(3600));
+        usuario.atualizarPerfil("Ana Souza", TipoParticipante.MORADOR, "5547999998888", true, AGORA.minusSeconds(3600));
         return usuario;
     }
 

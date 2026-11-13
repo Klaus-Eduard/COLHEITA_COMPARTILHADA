@@ -36,7 +36,7 @@ colheita-compartilhada/
    │  ├─ ColheitaApplication.java
    │  ├─ config/        SecurityConfig, AtivoCheckFilter, ErroJsonWriter, ClockConfig, AdminBootstrap, DemoDataLoader
    │  ├─ comum/         ApiExceptionHandler, ErroResposta, Pagina, exceções (RegraNegocio, EstadoInvalido, NaoEncontrado, AcessoNegado, Conflito, MuitasTentativas)
-   │  ├─ usuario/       Usuario, Papel, TipoParticipante, UsuarioRepository, UsuarioService, SessaoService,
+   │  ├─ usuario/       Usuario, Papel, TipoParticipante, Whatsapp, UsuarioRepository, UsuarioService, SessaoService,
    │  │                 UsuarioAutenticado (UserDetails), UsuarioDetailsService, LoginRateLimiter,
    │  │                 AuthController (/usuarios, /sessao, /csrf), PerfilController (/me, /me/anuncios), dto/
    │  ├─ catalogo/      Bairro, Categoria, repositórios, CatalogoService, CatalogoController, dto/

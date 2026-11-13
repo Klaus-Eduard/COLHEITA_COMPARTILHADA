@@ -2,8 +2,10 @@ package br.com.colheitacompartilhada.usuario;
 
 import java.time.Instant;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.UUID;
 
+import br.com.colheitacompartilhada.comum.RegraNegocioException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -64,6 +66,31 @@ public class Usuario {
         usuario.ativo = true;
         usuario.criadoEm = agora;
         return usuario;
+    }
+
+    /** RN02. Recebe o WhatsApp já normalizado (ou null para remover). */
+    public void atualizarPerfil(String nome, TipoParticipante tipo, String whatsapp, boolean aceiteContato,
+            Instant agora) {
+        if (aceiteContato && whatsapp == null) {
+            throw new RegraNegocioException("VALIDACAO", "whatsapp",
+                    "Informe o WhatsApp com DDD.");
+        }
+        boolean numeroMudou = !Objects.equals(this.whatsapp, whatsapp);
+        this.nome = nome.trim();
+        this.tipo = tipo;
+        this.whatsapp = whatsapp;
+        this.aceiteContatoEm = novoAceite(aceiteContato, numeroMudou, agora);
+    }
+
+    // Trocar o número exige um aceite novo; mantendo o número, a data original do aceite é preservada.
+    private Instant novoAceite(boolean aceiteContato, boolean numeroMudou, Instant agora) {
+        if (!aceiteContato) {
+            return null;
+        }
+        if (numeroMudou || aceiteContatoEm == null) {
+            return agora;
+        }
+        return aceiteContatoEm;
     }
 
     public void bloquear() {

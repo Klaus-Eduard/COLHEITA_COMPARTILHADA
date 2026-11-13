@@ -19,8 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Monta dados para os testes de integração de anúncios. Enquanto o perfil (issue 5) não existe,
- * o WhatsApp e o aceite do anunciante são gravados direto por SQL.
+ * Monta dados para os testes de integração de anúncios. Estados que a API não produz de imediato
+ * (prazo ou validade vencidos, usuário bloqueado) são gravados direto por SQL.
  */
 @Component
 public class CenarioAnuncios {
@@ -53,9 +53,10 @@ public class CenarioAnuncios {
         jdbc.update("delete from anuncio");
     }
 
+    /** Usuário que cadastrou WhatsApp e autorizou o contato pelo próprio PATCH /me (UC03). */
     public Usuario anunciante() throws Exception {
         String email = ContaDeTeste.cadastrar(mvc);
-        jdbc.update("update usuario set whatsapp = '5547999998888', aceite_contato_em = now() where email = ?", email);
+        ContaDeTeste.autorizarContato(mvc, ContaDeTeste.entrar(mvc, email));
         return usuarios.findByEmailIgnoreCase(email).orElseThrow();
     }
 

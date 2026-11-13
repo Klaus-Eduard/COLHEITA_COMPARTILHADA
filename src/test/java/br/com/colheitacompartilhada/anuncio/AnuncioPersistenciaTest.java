@@ -15,7 +15,6 @@ import br.com.colheitacompartilhada.usuario.Usuario;
 import br.com.colheitacompartilhada.usuario.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 /** Garante que os estados produzidos pela entidade são aceitos pelos CHECKs do schema (V1). */
 class AnuncioPersistenciaTest extends IntegracaoTest {
@@ -31,9 +30,6 @@ class AnuncioPersistenciaTest extends IntegracaoTest {
 
     @Autowired
     BairroRepository bairros;
-
-    @Autowired
-    JdbcTemplate jdbc;
 
     @Test
     void anuncioPublicadoEncerradoERemovidoPassaPelosChecksDoBanco() throws Exception {
@@ -58,7 +54,7 @@ class AnuncioPersistenciaTest extends IntegracaoTest {
 
     private Usuario anuncianteSalvo() throws Exception {
         String email = ContaDeTeste.cadastrar(mvc);
-        jdbc.update("update usuario set whatsapp = '5547999998888', aceite_contato_em = now() where email = ?", email);
+        ContaDeTeste.autorizarContato(mvc, ContaDeTeste.entrar(mvc, email));
         return usuarios.findByEmailIgnoreCase(email).orElseThrow();
     }
 

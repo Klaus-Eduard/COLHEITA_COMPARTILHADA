@@ -553,7 +553,7 @@ class AnuncioTest {
             Usuario autor = anunciante();
             Anuncio anuncio = Anuncio.publicar(autor, doacaoDeFrutas().montar(), AGORA, HOJE);
 
-            ReflectionTestUtils.setField(autor, "aceiteContatoEm", null);
+            autor.atualizarPerfil(autor.getNome(), autor.getTipo(), autor.getWhatsapp(), false, AGORA);
 
             assertThat(anuncio.estaVisivel(AGORA, HOJE)).isFalse();
         }
