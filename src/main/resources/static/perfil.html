@@ -11,8 +11,8 @@
   <header id="topo"></header>
   <main id="principal" class="conteudo">
     <div class="cartao cartao--larga">
-      <h1>Meu perfil</h1>
-      <p class="cartao__intro">Para publicar anúncios, cadastre seu WhatsApp e autorize a divulgação do contato.</p>
+      <h1 id="titulo-pagina">Meu perfil</h1>
+      <p id="intro" class="cartao__intro">Para publicar anúncios, cadastre seu WhatsApp e autorize a divulgação do contato.</p>
       <div id="mensagem-erro" class="mensagem" role="alert"></div>
       <div id="mensagem-ok" class="mensagem" aria-live="polite"></div>
       <form id="form" novalidate hidden>
@@ -26,6 +26,12 @@
           <input type="email" id="email" readonly aria-describedby="dica-email">
           <p id="dica-email" class="dica">O e-mail não pode ser alterado.</p>
         </div>
+        <div id="campo-conta-admin" class="campo" hidden>
+          <span class="rotulo">Tipo de conta</span>
+          <p class="valor-fixo">Moderador</p>
+          <p class="dica">Conta de moderação, criada pela equipe. Ela trata denúncias e não publica anúncios.</p>
+        </div>
+        <div id="campos-participante">
         <div class="campo">
           <fieldset aria-describedby="erro-tipo">
             <legend>Você é</legend>
@@ -45,6 +51,7 @@
         <div class="campo">
           <label class="opcao opcao--check"><input type="checkbox" id="aceiteContato" name="aceiteContato" aria-describedby="aviso-aceite"> Autorizo mostrar meu WhatsApp a usuários logados interessados nos meus anúncios</label>
           <p id="aviso-aceite" class="nota-info" aria-live="polite" hidden></p>
+        </div>
         </div>
         <div class="acoes-form">
           <button class="botao" type="submit" id="enviar">Salvar</button>

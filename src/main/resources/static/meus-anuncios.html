@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meus anúncios - Colheita Compartilhada</title>
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+  <a class="pular" href="#principal">Ir para o conteúdo</a>
+  <header id="topo"></header>
+  <main id="principal" class="conteudo">
+    <div class="topo-pagina">
+      <h1 id="titulo-pagina" tabindex="-1">Meus anúncios</h1>
+      <a id="btn-publicar" class="botao botao--auto" href="anuncio-form.html">Publicar anúncio</a>
+    </div>
+    <div id="msg-ok" class="mensagem" aria-live="polite"></div>
+    <div id="msg-erro" class="mensagem" role="alert"></div>
+    <div id="estado" class="estado" hidden></div>
+    <ul id="lista" class="meus"></ul>
+    <nav id="paginacao" class="paginacao" aria-label="Paginação" hidden></nav>
+
+    <dialog id="dialogo-encerrar" aria-labelledby="titulo-encerrar">
+      <h2 id="titulo-encerrar">Encerrar anúncio</h2>
+      <p id="encerrar-titulo"></p>
+      <div id="dialogo-erro" class="mensagem" role="alert"></div>
+      <form id="form-encerrar" novalidate>
+        <div class="campo">
+          <fieldset aria-describedby="erro-resultado">
+            <legend>O que aconteceu com o alimento?</legend>
+            <div id="opcoes-resultado" class="opcoes opcoes--coluna"></div>
+          </fieldset>
+          <span id="erro-resultado" class="erro"></span>
+          <p class="dica">Essa informação é sua. O site não confirma doação, venda nem entrega.</p>
+        </div>
+        <div class="dialogo__acoes">
+          <button type="button" id="cancelar-encerrar" class="botao botao--secundario">Cancelar</button>
+          <button type="submit" id="confirmar-encerrar" class="botao">Encerrar anúncio</button>
+        </div>
+      </form>
+    </dialog>
+  </main>
+  <footer id="rodape"></footer>
+  <script type="module" src="js/paginas/meus-anuncios.js"></script>
+</body>
+</html>

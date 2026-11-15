@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Publicar anúncio - Colheita Compartilhada</title>
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+  <a class="pular" href="#principal">Ir para o conteúdo</a>
+  <header id="topo"></header>
+  <main id="principal" class="conteudo">
+    <p><a class="link-voltar" href="meus-anuncios.html">&larr; Meus anúncios</a></p>
+    <div id="estado" class="estado"><p>Carregando…</p></div>
+
+    <section id="bloqueio" class="cartao cartao--form" hidden>
+      <h1 id="bloqueio-titulo">Publicar anúncio</h1>
+      <p id="bloqueio-texto"></p>
+      <a id="bloqueio-link" class="botao botao--auto" href="perfil.html">Ir para o perfil</a>
+    </section>
+
+    <section id="area-form" class="cartao cartao--form" hidden>
+      <h1 id="titulo-pagina">Publicar anúncio</h1>
+      <p class="cartao__intro">Divulgue só o que sobrou da sua própria horta ou produção.</p>
+      <form id="form" novalidate>
+        <div class="grupo">
+          <h2>O alimento</h2>
+          <div class="campo">
+            <label for="titulo">Título</label>
+            <input type="text" id="titulo" name="titulo" maxlength="100" required aria-describedby="erro-titulo">
+            <span id="erro-titulo" class="erro"></span>
+          </div>
+          <div class="campo">
+            <label for="categoriaId">Categoria</label>
+            <select id="categoriaId" name="categoriaId" required aria-describedby="erro-categoriaId"><option value="">Selecione</option></select>
+            <span id="erro-categoriaId" class="erro"></span>
+          </div>
+          <div class="campo">
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao" name="descricao" maxlength="1000" required aria-describedby="dica-descricao erro-descricao"></textarea>
+            <p id="dica-descricao" class="dica">De 10 a 1000 caracteres.</p>
+            <span id="erro-descricao" class="erro"></span>
+          </div>
+        </div>
+
+        <div class="grupo">
+          <h2>Quantidade e valor</h2>
+          <div class="linha">
+            <div class="campo">
+              <label for="quantidade">Quantidade</label>
+              <input type="text" id="quantidade" name="quantidade" inputmode="decimal" required aria-describedby="erro-quantidade">
+              <span id="erro-quantidade" class="erro"></span>
+            </div>
+            <div class="campo">
+              <label for="unidade">Unidade</label>
+              <select id="unidade" name="unidade" required aria-describedby="dica-unidade erro-unidade">
+                <option value="">Selecione</option>
+                <option value="KG">Quilo (kg)</option>
+                <option value="LITRO">Litro</option>
+                <option value="UNIDADE">Unidade</option>
+                <option value="MACO">Maço</option>
+                <option value="DUZIA">Dúzia</option>
+              </select>
+              <p id="dica-unidade" class="dica">Unidade, maço e dúzia só aceitam número inteiro.</p>
+              <span id="erro-unidade" class="erro"></span>
+            </div>
+          </div>
+          <div class="campo">
+            <fieldset aria-describedby="erro-modalidade">
+              <legend>Modalidade</legend>
+              <div class="opcoes">
+                <label class="opcao"><input type="radio" name="modalidade" value="DOACAO"> Doação</label>
+                <label class="opcao"><input type="radio" name="modalidade" value="VENDA"> Venda</label>
+              </div>
+            </fieldset>
+            <span id="erro-modalidade" class="erro"></span>
+          </div>
+          <div id="campo-preco" class="campo" hidden>
+            <label for="preco">Preço por unidade escolhida (opcional)</label>
+            <input type="text" id="preco" name="preco" inputmode="decimal" placeholder="Deixe vazio para &quot;a combinar&quot;" aria-describedby="erro-preco">
+            <span id="erro-preco" class="erro"></span>
+          </div>
+        </div>
+
+        <div class="grupo">
+          <h2>Local e conservação</h2>
+          <div class="campo">
+            <label for="bairroId">Bairro</label>
+            <select id="bairroId" name="bairroId" required aria-describedby="erro-bairroId"><option value="">Selecione</option></select>
+            <span id="erro-bairroId" class="erro"></span>
+          </div>
+          <div class="campo">
+            <label for="conservacao">Como conservar</label>
+            <input type="text" id="conservacao" name="conservacao" maxlength="300" required aria-describedby="erro-conservacao">
+            <span id="erro-conservacao" class="erro"></span>
+          </div>
+          <div id="bloco-animal" class="bloco-animal" hidden>
+            <h3>Informações declaradas</h3>
+            <p class="dica">Ovos e mel pedem estes dados. Eles são declarados por você e não certificam o alimento.</p>
+            <div id="slot-animal"></div>
+            <div class="campo">
+              <label for="origemProduto">Origem do produto</label>
+              <input type="text" id="origemProduto" name="origemProduto" maxlength="200" aria-describedby="erro-origemProduto">
+              <span id="erro-origemProduto" class="erro"></span>
+            </div>
+            <div class="campo">
+              <label for="inspecao">Identificação da inspeção</label>
+              <input type="text" id="inspecao" name="inspecao" maxlength="200" aria-describedby="erro-inspecao">
+              <span id="erro-inspecao" class="erro"></span>
+            </div>
+          </div>
+          <div id="slot-vegetal">
+            <div id="campo-validade" class="campo">
+              <label for="validadeAlimento" id="rotulo-validade">Validade do alimento (opcional)</label>
+              <input type="date" id="validadeAlimento" name="validadeAlimento" aria-describedby="erro-validadeAlimento">
+              <span id="erro-validadeAlimento" class="erro"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grupo">
+          <h2>Prazo e foto</h2>
+          <div class="campo">
+            <label for="disponivelAte">Disponível até</label>
+            <input type="date" id="disponivelAte" name="disponivelAte" required aria-describedby="dica-prazo erro-disponivelAte">
+            <p id="dica-prazo" class="dica"></p>
+            <span id="erro-disponivelAte" class="erro"></span>
+          </div>
+          <div class="campo">
+            <label for="foto">Foto (opcional)</label>
+            <input type="file" id="foto" name="foto" accept="image/jpeg,image/png" aria-describedby="dica-foto erro-foto">
+            <p id="dica-foto" class="dica">JPEG ou PNG, até 2 MB.</p>
+            <span id="erro-foto" class="erro"></span>
+            <div id="previa" class="previa" hidden>
+              <img id="previa-img" alt="Prévia da foto escolhida">
+              <button type="button" id="limpar-foto" class="botao botao--secundario">Remover foto escolhida</button>
+            </div>
+            <div id="foto-atual" class="previa" hidden>
+              <img id="foto-atual-img" alt="Foto atual do anúncio">
+              <label class="opcao"><input type="checkbox" id="removerFoto" name="removerFoto"> Remover a foto atual</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="campo">
+          <label class="opcao opcao--check">
+            <input type="checkbox" id="excedenteDeclarado" name="excedenteDeclarado" aria-describedby="erro-excedenteDeclarado">
+            <span>Declaro que é excedente próprio</span>
+          </label>
+          <span id="erro-excedenteDeclarado" class="erro"></span>
+        </div>
+
+        <div id="msg-erro" class="mensagem" role="alert"></div>
+        <div class="acoes-form">
+          <a class="botao botao--secundario botao--auto" href="meus-anuncios.html">Cancelar</a>
+          <button type="submit" id="enviar" class="botao botao--auto">Publicar</button>
+        </div>
+      </form>
+    </section>
+  </main>
+  <footer id="rodape"></footer>
+  <script type="module" src="js/paginas/anuncio-form.js"></script>
+</body>
+</html>
