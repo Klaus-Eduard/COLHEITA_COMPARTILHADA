@@ -9,9 +9,12 @@ import static br.com.colheitacompartilhada.anuncio.AnuncioSpecs.visivel;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import br.com.colheitacompartilhada.anuncio.dto.AnuncioForm;
+import br.com.colheitacompartilhada.anuncio.dto.ContatoAnunciante;
 import br.com.colheitacompartilhada.catalogo.Bairro;
 import br.com.colheitacompartilhada.catalogo.CatalogoService;
 import br.com.colheitacompartilhada.catalogo.Categoria;
@@ -68,6 +71,24 @@ public class AnuncioService {
         return anuncios.findComAssociacoesById(id)
                 .filter(anuncio -> anuncio.estaVisivel(agora(), hoje()))
                 .orElseThrow(AnuncioService::naoEncontrado);
+    }
+
+    /** UC09: revalida a visibilidade e o aceite a cada consulta do contato. */
+    @Transactional(readOnly = true)
+    public ContatoAnunciante contato(UUID anuncioId) {
+        Anuncio anuncio = detalhar(anuncioId);
+        String numero = anuncio.getUsuario().getWhatsapp();
+        if (numero == null || numero.isBlank() || !anuncio.getUsuario().podePublicar()) {
+            throw naoEncontrado();
+        }
+        String local = numero.substring(2);
+        String formatado = "(" + local.substring(0, 2) + ") " + local.substring(2, local.length() - 4)
+                + "-" + local.substring(local.length() - 4);
+        String mensagem = "Olá! Vi seu anúncio \"" + anuncio.getTitulo()
+                + "\" no Colheita Compartilhada.";
+        String link = "https://wa.me/" + numero + "?text="
+                + URLEncoder.encode(mensagem, StandardCharsets.UTF_8).replace("+", "%20");
+        return new ContatoAnunciante(numero, formatado, link);
     }
 
     @Transactional
