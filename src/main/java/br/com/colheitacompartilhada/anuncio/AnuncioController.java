@@ -7,7 +7,7 @@ import java.util.UUID;
 import br.com.colheitacompartilhada.anuncio.dto.AnuncioDetalhe;
 import br.com.colheitacompartilhada.anuncio.dto.AnuncioForm;
 import br.com.colheitacompartilhada.anuncio.dto.AnuncioResumo;
-import br.com.colheitacompartilhada.anuncio.dto.ContatoAnunciante;
+import br.com.colheitacompartilhada.anuncio.dto.ContatoResponse;
 import br.com.colheitacompartilhada.anuncio.dto.EncerramentoRequest;
 import br.com.colheitacompartilhada.anuncio.dto.MeuAnuncio;
 import br.com.colheitacompartilhada.comum.Pagina;
@@ -57,9 +57,10 @@ public class AnuncioController {
         return AnuncioDetalhe.de(anuncio, eu != null && anuncio.pertenceA(eu.id()));
     }
 
+    // RN08 é revalidada a cada chamada: anúncio que deixou de ser visível responde 404.
     @GetMapping("/anuncios/{id}/contato")
-    ContatoAnunciante contato(@PathVariable UUID id, @AuthenticationPrincipal UsuarioAutenticado eu) {
-        return anuncioService.contato(id);
+    ContatoResponse contato(@PathVariable UUID id) {
+        return ContatoResponse.de(anuncioService.detalhar(id));
     }
 
     @PostMapping(path = "/anuncios", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

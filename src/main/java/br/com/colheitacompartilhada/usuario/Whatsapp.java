@@ -24,4 +24,13 @@ public final class Whatsapp {
         }
         return comPais;
     }
+
+    /** Mostra o número gravado (55 + DDD + número) como "(47) 99999-8888". */
+    public static String formatar(String gravado) {
+        String semPais = gravado.substring(2);
+        String ddd = semPais.substring(0, 2);
+        String numero = semPais.substring(2);
+        int corte = numero.length() - 4;
+        return "(" + ddd + ") " + numero.substring(0, corte) + "-" + numero.substring(corte);
+    }
 }
