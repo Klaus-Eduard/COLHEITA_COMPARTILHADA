@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Moderação - Colheita Compartilhada</title>
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+  <a class="pular" href="#principal">Ir para o conteúdo</a>
+  <header id="topo"></header>
+  <main id="principal" class="conteudo">
+    <div id="msg-ok" class="mensagem" aria-live="polite"></div>
+    <div id="msg-erro" class="mensagem" role="alert"></div>
+    <div id="estado" class="estado" hidden></div>
+
+    <section id="vista-fila" hidden>
+      <div class="topo-pagina"><h1 id="titulo-fila" tabindex="-1">Moderação de denúncias</h1></div>
+      <nav class="abas" aria-label="Situação das denúncias">
+        <a id="aba-abertas" href="admin.html">Abertas</a>
+        <a id="aba-resolvidas" href="admin.html?status=RESOLVIDA">Resolvidas</a>
+      </nav>
+      <p id="resumo" class="resumo" aria-live="polite"></p>
+      <ul id="lista" class="fila"></ul>
+      <nav id="paginacao" class="paginacao" aria-label="Paginação" hidden></nav>
+    </section>
+
+    <section id="vista-detalhe" hidden>
+      <p><a class="link-voltar" href="admin.html">&larr; Voltar à fila</a></p>
+      <div class="denuncia__topo">
+        <h1 id="titulo-detalhe" tabindex="-1">Denúncia</h1>
+        <span id="d-status" class="selo"></span>
+      </div>
+      <p id="d-meta" class="resumo"></p>
+
+      <section class="bloco" aria-labelledby="h-motivo"><h2 id="h-motivo">Motivo da denúncia</h2><p id="d-motivo"></p></section>
+
+      <section class="bloco" aria-labelledby="h-anuncio">
+        <h2 id="h-anuncio">Anúncio denunciado</h2>
+        <div class="denuncia__anuncio">
+          <img id="a-foto" src="img/placeholder.svg" alt="">
+          <div>
+            <p><strong id="a-titulo"></strong></p>
+            <div class="meu__selos"><span id="a-status" class="selo"></span><span id="a-modalidade" class="selo"></span><span id="a-visibilidade" class="selo"></span></div>
+            <dl class="fatos">
+              <dt>Categoria</dt><dd id="a-categoria"></dd>
+              <dt>Bairro</dt><dd id="a-bairro"></dd>
+              <dt>Quantidade</dt><dd id="a-quantidade"></dd>
+              <dt>Disponível até</dt><dd id="a-disponivel"></dd>
+            </dl>
+            <p id="a-descricao"></p>
+            <dl id="a-declaradas" class="fatos" hidden>
+              <dt>Origem</dt><dd id="a-origem"></dd>
+              <dt>Validade</dt><dd id="a-validade"></dd>
+              <dt>Inspeção</dt><dd id="a-inspecao"></dd>
+            </dl>
+            <p id="a-link-publico" hidden><a id="a-link" href="#">Ver como o público vê</a></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="bloco" aria-labelledby="h-anunciante">
+        <h2 id="h-anunciante">Anunciante</h2>
+        <dl class="fatos">
+          <dt>Nome</dt><dd id="p-nome"></dd>
+          <dt>E-mail</dt><dd id="p-email"></dd>
+          <dt>Tipo</dt><dd id="p-tipo"></dd>
+          <dt>Perfil</dt><dd id="p-papel"></dd>
+          <dt>Conta</dt><dd id="p-conta"></dd>
+        </dl>
+      </section>
+
+      <section class="bloco" aria-labelledby="h-decisao">
+        <h2 id="h-decisao">Decisão</h2>
+        <form id="form-decisao" novalidate hidden>
+          <div class="campo">
+            <fieldset aria-describedby="erro-procedente">
+              <legend>A denúncia procede?</legend>
+              <div class="opcoes">
+                <label class="opcao"><input type="radio" name="procedente" value="true"> Sim, remover o anúncio</label>
+                <label class="opcao"><input type="radio" name="procedente" value="false"> Não, manter o anúncio</label>
+              </div>
+            </fieldset>
+            <span id="erro-procedente" class="erro"></span>
+          </div>
+          <div class="campo">
+            <label for="decisao">Decisão</label>
+            <textarea id="decisao" name="decisao" maxlength="500" required aria-describedby="contador-decisao erro-decisao"></textarea>
+            <p id="contador-decisao" class="dica contador">0/500</p>
+            <span id="erro-decisao" class="erro"></span>
+          </div>
+          <div class="campo">
+            <label class="opcao opcao--check">
+              <input type="checkbox" id="bloquearAnunciante" name="bloquearAnunciante" aria-describedby="dica-bloqueio">
+              <span>Bloquear anunciante</span>
+            </label>
+            <p id="dica-bloqueio" class="dica"></p>
+          </div>
+          <div id="msg-form" class="mensagem" role="alert"></div>
+          <button type="submit" id="registrar" class="botao botao--auto">Registrar decisão</button>
+        </form>
+        <dl id="decisao-leitura" class="fatos" hidden>
+          <dt>Decisão</dt><dd id="r-decisao"></dd>
+          <dt>Moderador</dt><dd id="r-moderador"></dd>
+          <dt>Resolvida em</dt><dd id="r-data"></dd>
+        </dl>
+      </section>
+    </section>
+
+    <dialog id="dialogo-bloqueio" aria-labelledby="titulo-bloqueio">
+      <h2 id="titulo-bloqueio">Bloquear anunciante</h2>
+      <p id="texto-bloqueio"></p>
+      <div class="dialogo__acoes">
+        <button type="button" id="cancelar-bloqueio" class="botao botao--secundario">Cancelar</button>
+        <button type="button" id="confirmar-bloqueio" class="botao">Bloquear e registrar</button>
+      </div>
+    </dialog>
+  </main>
+  <footer id="rodape"></footer>
+  <script type="module" src="js/paginas/admin.js"></script>
+</body>
+</html>

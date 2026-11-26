@@ -15,6 +15,7 @@ const botao = document.getElementById('enviar');
 const aviso = document.getElementById('aviso-aceite');
 
 let salvo = null; // último perfil gravado: base para decidir qual aviso mostrar
+let ehAdmin = false; // moderador: perfil especial, sem tipo de participante, WhatsApp nem autorização
 
 function numeroLocal(whatsapp) {
   return whatsapp ? apenasDigitos(whatsapp).replace(/^55/, '') : '';
@@ -73,7 +74,7 @@ form.addEventListener('submit', async (ev) => {
     const u = await api('PATCH', '/me', { json: dados });
     definirUsuario(u);
     preencher(u);
-    mostrarMensagem(okGlobal, u.podePublicar
+    mostrarMensagem(okGlobal, ehAdmin ? 'Perfil salvo.' : u.podePublicar
       ? 'Perfil salvo. Você já pode publicar anúncios.'
       : 'Perfil salvo. Para publicar, cadastre seu WhatsApp e autorize o contato.', 'ok');
   } catch (e) {
@@ -88,5 +89,15 @@ const usuario = await exigirLogin();
 if (usuario) {
   await montarLayout('perfil.html');
   preencher(usuario);
+  // Moderador: só o nome muda. Os campos de participante ficam escondidos, mas continuam preenchidos com os
+  // valores atuais, então o PATCH /me (que pede o formulário completo) devolve tipo, WhatsApp e aceite como estão.
+  ehAdmin = usuario.papel === 'ADMIN';
+  if (ehAdmin) {
+    document.getElementById('titulo-pagina').textContent = 'Perfil do moderador';
+    document.getElementById('intro').textContent = 'Dados da sua conta de moderação.';
+    document.getElementById('campos-participante').hidden = true;
+    document.getElementById('campo-conta-admin').hidden = false;
+    document.title = 'Perfil do moderador - Colheita Compartilhada';
+  }
   form.hidden = false;
 }
