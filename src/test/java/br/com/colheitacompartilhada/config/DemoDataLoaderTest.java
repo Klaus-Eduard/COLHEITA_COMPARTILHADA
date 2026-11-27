@@ -63,12 +63,12 @@ class DemoDataLoaderTest extends IntegracaoTest {
     }
 
     @Test
-    void criaSeisAnunciosVisiveisNaBuscaPublica() throws Exception {
+    void criaOsAnunciosDeExemploVisiveisNaBuscaPublica() throws Exception {
         int criados = carregador("senha-demo-1234").carregar();
 
-        assertThat(criados).isEqualTo(6);
+        assertThat(criados).isEqualTo(15);
         mvc.perform(get("/anuncios")).andExpect(status().isOk())
-                .andExpect(content().string(containsString("\"totalElementos\":6")));
+                .andExpect(content().string(containsString("\"totalElementos\":15")));
     }
 
     @Test
@@ -88,11 +88,11 @@ class DemoDataLoaderTest extends IntegracaoTest {
         carregador("senha-demo-1234").carregar();
 
         var animais = anuncios.findAll().stream().filter(a -> a.getInspecao() != null).toList();
-        assertThat(animais).hasSize(2).allSatisfy(a -> {
+        assertThat(animais).hasSize(4).allSatisfy(a -> {
             assertThat(a.getInspecao()).contains("fictício");
             assertThat(a.getValidadeAlimento()).isNotNull();
         });
-        assertThat(anuncios.findAll()).filteredOn(a -> a.getFotoUrl() != null).hasSize(4)
+        assertThat(anuncios.findAll()).filteredOn(a -> a.getFotoUrl() != null).hasSize(9)
                 .allSatisfy(a -> assertThat(a.getFotoUrl()).startsWith("/fotos/"));
     }
 
@@ -106,6 +106,16 @@ class DemoDataLoaderTest extends IntegracaoTest {
 
         assertThat(anuncios.count()).isEqualTo(antes);
         assertThat(anuncios.findAll()).allSatisfy(a -> assertThat(a.getStatus()).isEqualTo(StatusAnuncio.ATIVO));
+    }
+
+    @Test
+    void carregaMesmoQuandoOutraPessoaJaTemAnuncioAtivo() throws Exception {
+        cenario.doacaoDeFrutas(cenario.anunciante());
+
+        carregador("senha-demo-1234").run(new DefaultApplicationArguments());
+
+        assertThat(anuncios.count()).isEqualTo(16);
+        assertThat(usuarios.findByEmailIgnoreCase(DemoDataLoader.EMAIL_MARIA)).isPresent();
     }
 
     @Test
@@ -126,7 +136,7 @@ class DemoDataLoaderTest extends IntegracaoTest {
         carregador.run(new DefaultApplicationArguments());
 
         assertThat(anuncios.findAll().stream().filter(a -> a.getExpiraEm().isAfter(clock.instant())).count())
-                .isEqualTo(6);
+                .isEqualTo(15);
         assertThat(usuarios.findAll().stream().filter(u -> u.getEmail().endsWith(".demo@exemplo.com")).count())
                 .isEqualTo(2);
     }

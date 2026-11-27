@@ -37,7 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * Dados fictícios para a apresentação (issue #19). Só roda com o perfil "demo" (SPRING_PROFILES_ACTIVE=demo).
  * Usa os services de verdade, então tudo passa pelas mesmas regras (RN02 a RN08) da aplicação.
- * Não faz nada se já existir algum anúncio ativo e dentro do prazo, por isso é seguro a cada reinício.
+ * Não faz nada se a conta de demonstração (Maria) já tiver anúncio ativo e dentro do prazo, por isso é seguro a cada reinício.
  * Nunca impede o app de subir: qualquer falha vira um aviso no log.
  */
 @Component
@@ -76,7 +76,8 @@ public class DemoDataLoader implements ApplicationRunner {
             log.warn("Perfil demo ativo, mas DEMO_PASSWORD precisa ter de 8 a 72 caracteres. Nada foi carregado.");
             return;
         }
-        if (anuncios.existsByStatusAndExpiraEmAfter(StatusAnuncio.ATIVO, clock.instant())) {
+        // Só os anúncios da conta de demonstração contam: anúncios de teste de outras pessoas não impedem o carregamento.
+        if (anuncios.existsByUsuarioEmailAndStatusAndExpiraEmAfter(EMAIL_MARIA, StatusAnuncio.ATIVO, clock.instant())) {
             log.info("Dados de demonstração já presentes. Nada a fazer.");
             return;
         }
@@ -106,10 +107,28 @@ public class DemoDataLoader implements ApplicationRunner {
                         "Verduras e legumes", "Velha", "10", Unidade.UNIDADE, Modalidade.VENDA, null, null, 5, false, 0x3F8F3F),
                 new Modelo(maria, "Mandioca fresca", "Mandioca colhida esta semana, boa para cozinhar ou fritar.",
                         "Verduras e legumes", "Itoupava Norte", "4", Unidade.KG, Modalidade.DOACAO, null, null, 7, false, 0xB08968),
+                new Modelo(maria, "Bananas prata", "Cachos de banana prata maduras, colhidas no sítio.",
+                        "Frutas", "Vila Nova", "6", Unidade.KG, Modalidade.DOACAO, null, null, 5, true, 0xF2D45C),
+                new Modelo(maria, "Couve manteiga", "Maços de couve fresca, colhida hoje.",
+                        "Verduras e legumes", "Itoupava Central", "8", Unidade.MACO, Modalidade.DOACAO, null, null, 5, true, 0x2E7D32),
+                new Modelo(maria, "Tomate caqui", "Tomates firmes, sem agrotóxico, direto da horta.",
+                        "Verduras e legumes", "Badenfurt", "5", Unidade.KG, Modalidade.VENDA, "6.00", null, 6, false, 0xD64545),
+                new Modelo(maria, "Goiabas vermelhas", "Goiabas maduras de pé, ótimas para doce e suco.",
+                        "Frutas", "Fortaleza Alta", "4", Unidade.KG, Modalidade.DOACAO, null, null, 6, true, 0xE57373),
                 new Modelo(joao, "Ovos caipiras", "Ovos de galinhas criadas soltas, coletados nesta semana.",
                         "Ovos", "Fortaleza", "2", Unidade.DUZIA, Modalidade.VENDA, "12.00", hoje.plusDays(15), 6, true, 0xF2E8CF),
                 new Modelo(joao, "Mel de laranjeira", "Mel puro de laranjeira, pote de 500 g.",
-                        "Mel", "Ponta Aguda", "6", Unidade.UNIDADE, Modalidade.VENDA, "35.00", hoje.plusDays(180), 7, true, 0xE0A100));
+                        "Mel", "Ponta Aguda", "6", Unidade.UNIDADE, Modalidade.VENDA, "35.00", hoje.plusDays(180), 7, true, 0xE0A100),
+                new Modelo(joao, "Ovos de codorna", "Ovos de codorna frescos, bandejas de uma dúzia.",
+                        "Ovos", "Testo Salto", "3", Unidade.DUZIA, Modalidade.VENDA, "9.00", hoje.plusDays(12), 7, false, 0xE8DCC4),
+                new Modelo(joao, "Mel silvestre", "Mel silvestre de colmeias próprias, pote de 300 g.",
+                        "Mel", "Salto do Norte", "4", Unidade.UNIDADE, Modalidade.VENDA, "28.00", hoje.plusDays(200), 7, true, 0xC27C0E),
+                new Modelo(joao, "Abóbora cabotiá", "Abóboras grandes, doces, para sopa e purê.",
+                        "Verduras e legumes", "Progresso", "6", Unidade.KG, Modalidade.DOACAO, null, null, 7, true, 0xE69138),
+                new Modelo(joao, "Bergamotas", "Bergamotas (mexericas) doces, colhidas esta semana.",
+                        "Frutas", "Velha Central", "8", Unidade.KG, Modalidade.VENDA, "3.50", null, 5, false, 0xF6A04D),
+                new Modelo(joao, "Cheiro-verde", "Maços de salsinha e cebolinha. Preço a combinar.",
+                        "Verduras e legumes", "Escola Agrícola", "12", Unidade.MACO, Modalidade.VENDA, null, null, 5, false, 0x558B2F));
 
         int criados = 0;
         for (Modelo modelo : modelos) {
