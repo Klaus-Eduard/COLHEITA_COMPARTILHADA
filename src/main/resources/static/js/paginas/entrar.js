@@ -10,13 +10,8 @@ const erroGlobal = document.getElementById('mensagem-erro');
 const okGlobal = document.getElementById('mensagem-ok');
 const botao = document.getElementById('enviar');
 
-const logado = await montarLayout('entrar.html');
-if (logado) location.replace(destinoAposLogin(logado));
-
-if (new URLSearchParams(location.search).get('conta') === 'criada') {
-  mostrarMensagem(okGlobal, 'Conta criada. Entre para continuar.', 'ok');
-}
-
+// O envio é registrado antes de qualquer espera: se a pessoa apertar Enter com a página ainda carregando,
+// o formulário não pode ser enviado pelo navegador (a senha iria para a barra de endereço).
 form.addEventListener('submit', async (ev) => {
   ev.preventDefault();
   limparErros(form);
@@ -44,3 +39,10 @@ form.addEventListener('submit', async (ev) => {
     botao.textContent = 'Entrar';
   }
 });
+
+const logado = await montarLayout('entrar.html');
+if (logado) location.replace(destinoAposLogin(logado));
+
+if (new URLSearchParams(location.search).get('conta') === 'criada') {
+  mostrarMensagem(okGlobal, 'Conta criada. Entre para continuar.', 'ok');
+}
