@@ -36,3 +36,5 @@ app:
     email: ${ADMIN_EMAIL:}
     senha: ${ADMIN_PASSWORD:}
     nome: ${ADMIN_NOME:Administrador}
+  demo:
+    senha: ${DEMO_PASSWORD:}
