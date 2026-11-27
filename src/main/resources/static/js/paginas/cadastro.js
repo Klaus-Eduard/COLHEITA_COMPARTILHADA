@@ -14,9 +14,8 @@ const erroGlobal = document.getElementById('mensagem-erro');
 const botao = document.getElementById('enviar');
 document.getElementById('dica-senha').textContent = 'De ' + SENHA_MIN + ' a ' + SENHA_MAX + ' caracteres.';
 
-const logado = await montarLayout('cadastro.html');
-if (logado) location.replace(destinoAposLogin(logado));
-
+// O envio é registrado antes de qualquer espera: se a pessoa apertar Enter com a página ainda carregando,
+// o formulário não pode ser enviado pelo navegador (a senha iria para a barra de endereço).
 form.addEventListener('submit', async (ev) => {
   ev.preventDefault();
   limparErros(form);
@@ -48,3 +47,6 @@ form.addEventListener('submit', async (ev) => {
     botao.textContent = 'Criar conta';
   }
 });
+
+const logado = await montarLayout('cadastro.html');
+if (logado) location.replace(destinoAposLogin(logado));

@@ -60,7 +60,7 @@
     <dialog id="dialogo-denuncia" aria-labelledby="titulo-dialogo">
       <h2 id="titulo-dialogo">Denunciar anúncio</h2>
       <div id="dialogo-erro" class="mensagem" role="alert"></div>
-      <form id="form-denuncia" novalidate>
+      <form id="form-denuncia" method="post" novalidate>
         <div class="campo">
           <label for="motivo">Qual é o problema com este anúncio?</label>
           <textarea id="motivo" name="motivo" maxlength="500" required aria-describedby="contador erro-motivo"></textarea>
