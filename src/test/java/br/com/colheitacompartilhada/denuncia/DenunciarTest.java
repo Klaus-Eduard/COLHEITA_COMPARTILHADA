@@ -16,6 +16,7 @@ import br.com.colheitacompartilhada.usuario.ContaDeTeste;
 import br.com.colheitacompartilhada.usuario.Usuario;
 import br.com.colheitacompartilhada.usuario.UsuarioRepository;
 import com.jayway.jsonpath.JsonPath;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,13 @@ class DenunciarTest extends IntegracaoTest {
     }
 
     // ---------- UC10 ----------
+
+    // Estes testes deixam anúncios vencidos e ainda ATIVOS; sem limpar, o ColheitaApplicationTest (que espera
+    // zero anúncios a expirar) falha dependendo da ordem em que as classes rodam.
+    @AfterEach
+    void limparDepois() {
+        cenario.limparAnuncios();
+    }
 
     @Test
     void uc10_1_denunciarOProprioAnuncioRecebe400DenunciaProprioAnuncio() throws Exception {
