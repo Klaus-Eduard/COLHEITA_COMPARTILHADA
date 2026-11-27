@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 import br.com.colheitacompartilhada.anuncio.Anuncio;
+import br.com.colheitacompartilhada.comum.RegraNegocioException;
 import br.com.colheitacompartilhada.usuario.Usuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -54,6 +55,21 @@ public class Denuncia {
     private Instant resolvidaEm;
 
     protected Denuncia() {
+    }
+
+    /** RN10.2 e RN10.5: não se denuncia o próprio anúncio, e denunciar não remove nada. */
+    public static Denuncia abrir(Anuncio anuncio, Usuario autor, String motivo, Instant agora) {
+        if (anuncio.pertenceA(autor.getId())) {
+            throw new RegraNegocioException("DENUNCIA_PROPRIO_ANUNCIO", null,
+                    "Você não pode denunciar o seu próprio anúncio.");
+        }
+        Denuncia denuncia = new Denuncia();
+        denuncia.anuncio = anuncio;
+        denuncia.autor = autor;
+        denuncia.motivo = motivo.trim();
+        denuncia.status = StatusDenuncia.ABERTA;
+        denuncia.criadoEm = agora;
+        return denuncia;
     }
 
     public UUID getId() {
