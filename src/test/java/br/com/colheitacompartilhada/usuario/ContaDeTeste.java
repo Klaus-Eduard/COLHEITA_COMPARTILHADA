@@ -37,6 +37,13 @@ public final class ContaDeTeste {
         return "u" + UUID.randomUUID().toString().replace("-", "") + "@exemplo.com";
     }
 
+    /** Cria um moderador (a API não cadastra ADMIN) e devolve o e-mail; a senha é SENHA. */
+    public static String criarAdmin(UsuarioService usuarios) {
+        String email = emailUnico();
+        usuarios.criarAdminSeNaoExistir("Moderadora", email, SENHA);
+        return email;
+    }
+
     public static ResultActions cadastrar(MockMvc mvc, String json) throws Exception {
         return mvc.perform(post("/usuarios").with(csrf()).contentType(MediaType.APPLICATION_JSON).content(json));
     }

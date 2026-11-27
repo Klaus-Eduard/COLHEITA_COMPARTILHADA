@@ -11,10 +11,12 @@ import java.util.UUID;
 import br.com.colheitacompartilhada.anuncio.Anuncio;
 import br.com.colheitacompartilhada.anuncio.DadosAnuncio;
 import br.com.colheitacompartilhada.anuncio.Modalidade;
+import br.com.colheitacompartilhada.anuncio.Resultado;
 import br.com.colheitacompartilhada.anuncio.StatusAnuncio;
 import br.com.colheitacompartilhada.anuncio.Unidade;
 import br.com.colheitacompartilhada.catalogo.Bairro;
 import br.com.colheitacompartilhada.catalogo.Categoria;
+import br.com.colheitacompartilhada.comum.EstadoInvalidoException;
 import br.com.colheitacompartilhada.comum.RegraNegocioException;
 import br.com.colheitacompartilhada.usuario.Papel;
 import br.com.colheitacompartilhada.usuario.TipoParticipante;
@@ -24,7 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** RN10 na entidade (UC10). Datas fixas: o relógio é sempre passado como argumento. */
+/** RN10 e RN11 na entidade (UC10, UC11, UC12). Datas fixas: o relógio é sempre passado como argumento. */
 class DenunciaTest {
 
     private static final Instant AGORA = Instant.parse("2026-10-20T15:00:00Z");
@@ -60,6 +62,117 @@ class DenunciaTest {
         assertThatThrownBy(() -> Denuncia.abrir(anuncio, anunciante, "Motivo com tamanho suficiente.", AGORA))
                 .isInstanceOfSatisfying(RegraNegocioException.class,
                         e -> assertThat(e.getCodigo()).isEqualTo("DENUNCIA_PROPRIO_ANUNCIO"));
+    }
+
+    @Test
+    void uc11_2_improcedenteResolveSemMudarOAnuncio() {
+        Denuncia denuncia = denunciaAberta();
+
+        denuncia.resolver(moderador, false, "  Sem problema.  ", false, AGORA.plusSeconds(60));
+
+        assertThat(denuncia.getStatus()).isEqualTo(StatusDenuncia.RESOLVIDA);
+        assertThat(denuncia.getModerador()).isSameAs(moderador);
+        assertThat(denuncia.getDecisao()).isEqualTo("Sem problema.");
+        assertThat(denuncia.getResolvidaEm()).isEqualTo(AGORA.plusSeconds(60));
+        assertThat(anuncio.getStatus()).isEqualTo(StatusAnuncio.ATIVO);
+        assertThat(anunciante.isAtivo()).isTrue();
+    }
+
+    @Test
+    void uc11_3_procedenteRemoveOAnuncioAtivo() {
+        Denuncia denuncia = denunciaAberta();
+
+        denuncia.resolver(moderador, true, "Produto industrializado.", false, AGORA);
+
+        assertThat(anuncio.getStatus()).isEqualTo(StatusAnuncio.REMOVIDO);
+        assertThat(denuncia.getStatus()).isEqualTo(StatusDenuncia.RESOLVIDA);
+        assertThat(anunciante.isAtivo()).isTrue();
+    }
+
+    @Test
+    void uc11_4_procedenteEmAnuncioEncerradoRemoveELimpaResultadoEDataDeEncerramento() {
+        Denuncia denuncia = denunciaAberta();
+        anuncio.encerrar(Resultado.DOADO, AGORA.plusSeconds(30));
+
+        denuncia.resolver(moderador, true, "Produto industrializado.", false, AGORA.plusSeconds(60));
+
+        assertThat(anuncio.getStatus()).isEqualTo(StatusAnuncio.REMOVIDO);
+        assertThat(anuncio.getResultado()).isNull();
+        assertThat(anuncio.getEncerradoEm()).isNull();
+    }
+
+    @Test
+    void rn10_6_procedenteEmAnuncioJaRemovidoSoFechaADenuncia() {
+        Denuncia denuncia = denunciaAberta();
+        anuncio.remover(AGORA);
+
+        denuncia.resolver(moderador, true, "Já removido por outra denúncia.", false, AGORA);
+
+        assertThat(anuncio.getStatus()).isEqualTo(StatusAnuncio.REMOVIDO);
+        assertThat(denuncia.getStatus()).isEqualTo(StatusDenuncia.RESOLVIDA);
+    }
+
+    @Test
+    void uc11_5_resolverDenunciaJaResolvidaFalhaComEstadoInvalido() {
+        Denuncia denuncia = denunciaAberta();
+        denuncia.resolver(moderador, false, "Sem problema.", false, AGORA);
+
+        assertThatThrownBy(() -> denuncia.resolver(moderador, true, "Outra decisão.", false, AGORA))
+                .isInstanceOfSatisfying(EstadoInvalidoException.class,
+                        e -> assertThat(e.getStatusAtual()).isEqualTo("RESOLVIDA"));
+        assertThat(anuncio.getStatus()).isEqualTo(StatusAnuncio.ATIVO);
+    }
+
+    @Test
+    void uc12_1_procedenteComBloqueioDesativaOAnuncianteSemMudarOStatusDoAnuncio() {
+        Denuncia denuncia = denunciaAberta();
+
+        denuncia.resolver(moderador, true, "Reincidente.", true, AGORA);
+
+        assertThat(anunciante.isAtivo()).isFalse();
+        assertThat(denuncia.getStatus()).isEqualTo(StatusDenuncia.RESOLVIDA);
+    }
+
+    @Test
+    void uc12_3_bloquearSemSerProcedenteFalhaENadaMuda() {
+        Denuncia denuncia = denunciaAberta();
+
+        assertThatThrownBy(() -> denuncia.resolver(moderador, false, "Sem problema.", true, AGORA))
+                .isInstanceOfSatisfying(RegraNegocioException.class,
+                        e -> assertThat(e.getCodigo()).isEqualTo("BLOQUEIO_NAO_PERMITIDO"));
+        assertNadaMudou(denuncia);
+    }
+
+    @Test
+    void uc12_3_bloquearUmAdminFalhaENadaMuda() {
+        Usuario outroAdmin = usuario("Outro admin", Papel.ADMIN);
+        Anuncio doAdmin = Anuncio.publicar(outroAdmin, dadosDeDoacao(), AGORA, HOJE);
+        Denuncia denuncia = Denuncia.abrir(doAdmin, autor, "Motivo com tamanho suficiente.", AGORA);
+
+        assertThatThrownBy(() -> denuncia.resolver(moderador, true, "Decisão.", true, AGORA))
+                .isInstanceOfSatisfying(RegraNegocioException.class,
+                        e -> assertThat(e.getCodigo()).isEqualTo("BLOQUEIO_NAO_PERMITIDO"));
+        assertThat(doAdmin.getStatus()).isEqualTo(StatusAnuncio.ATIVO);
+        assertThat(outroAdmin.isAtivo()).isTrue();
+        assertThat(denuncia.getStatus()).isEqualTo(StatusDenuncia.ABERTA);
+    }
+
+    @Test
+    void uc12_4_bloquearQuemJaEstaBloqueadoNaoDaErro() {
+        anunciante.bloquear();
+        Denuncia denuncia = denunciaAberta();
+
+        denuncia.resolver(moderador, true, "Reincidente.", true, AGORA);
+
+        assertThat(anunciante.isAtivo()).isFalse();
+        assertThat(denuncia.getStatus()).isEqualTo(StatusDenuncia.RESOLVIDA);
+    }
+
+    private void assertNadaMudou(Denuncia denuncia) {
+        assertThat(denuncia.getStatus()).isEqualTo(StatusDenuncia.ABERTA);
+        assertThat(denuncia.getModerador()).isNull();
+        assertThat(anuncio.getStatus()).isEqualTo(StatusAnuncio.ATIVO);
+        assertThat(anunciante.isAtivo()).isTrue();
     }
 
     private Denuncia denunciaAberta() {

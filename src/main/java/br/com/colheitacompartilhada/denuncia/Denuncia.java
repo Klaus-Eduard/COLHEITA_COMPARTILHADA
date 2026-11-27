@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.util.UUID;
 
 import br.com.colheitacompartilhada.anuncio.Anuncio;
+import br.com.colheitacompartilhada.anuncio.StatusAnuncio;
+import br.com.colheitacompartilhada.comum.EstadoInvalidoException;
 import br.com.colheitacompartilhada.comum.RegraNegocioException;
 import br.com.colheitacompartilhada.usuario.Usuario;
 import jakarta.persistence.Column;
@@ -70,6 +72,44 @@ public class Denuncia {
         denuncia.status = StatusDenuncia.ABERTA;
         denuncia.criadoEm = agora;
         return denuncia;
+    }
+
+    /**
+     * RN10.6, tudo ou nada: primeiro confere todas as condições, depois muda anúncio, anunciante e denúncia.
+     * A transação do service garante que, se algo falhar depois, nada é gravado.
+     */
+    public void resolver(Usuario moderador, boolean procedente, String decisao, boolean bloquearAnunciante,
+            Instant agora) {
+        if (status != StatusDenuncia.ABERTA) {
+            throw new EstadoInvalidoException(status.name(), "Esta denúncia já foi resolvida.");
+        }
+        Usuario anunciante = anuncio.getUsuario();
+        if (bloquearAnunciante) {
+            exigirBloqueioPermitido(procedente, anunciante, moderador);
+        }
+        if (procedente && anuncio.getStatus() != StatusAnuncio.REMOVIDO) {
+            anuncio.remover(agora);
+        }
+        if (bloquearAnunciante) {
+            anunciante.bloquear();
+        }
+        this.moderador = moderador;
+        this.decisao = decisao.trim();
+        this.status = StatusDenuncia.RESOLVIDA;
+        this.resolvidaEm = agora;
+    }
+
+    private static void exigirBloqueioPermitido(boolean procedente, Usuario anunciante, Usuario moderador) {
+        if (!procedente) {
+            throw bloqueioNaoPermitido("Só é possível bloquear o anunciante quando a denúncia é procedente.");
+        }
+        if (anunciante.isAdmin() || anunciante.getId().equals(moderador.getId())) {
+            throw bloqueioNaoPermitido("Não é possível bloquear um administrador.");
+        }
+    }
+
+    private static RegraNegocioException bloqueioNaoPermitido(String mensagem) {
+        return new RegraNegocioException("BLOQUEIO_NAO_PERMITIDO", null, mensagem);
     }
 
     public UUID getId() {
