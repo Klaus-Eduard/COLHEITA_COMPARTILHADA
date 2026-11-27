@@ -32,7 +32,8 @@ public interface AnuncioRepository extends JpaRepository<Anuncio, UUID>, JpaSpec
     @Query("select a from Anuncio a where a.id = :id")
     Optional<Anuncio> findByIdParaAtualizar(@Param("id") UUID id);
 
-    boolean existsByStatusAndExpiraEmAfter(StatusAnuncio status, Instant instante);
+    // Usado pelo DemoDataLoader: só os anúncios das contas de demonstração decidem se ele precisa carregar.
+    boolean existsByUsuarioEmailAndStatusAndExpiraEmAfter(String email, StatusAnuncio status, Instant instante);
 
     @Modifying
     @Query("update Anuncio a set a.status = EXPIRADO, a.atualizadoEm = :agora where a.status = ATIVO and a.expiraEm <= :agora")

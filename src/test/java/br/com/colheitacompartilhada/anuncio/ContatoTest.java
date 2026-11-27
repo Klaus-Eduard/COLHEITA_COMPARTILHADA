@@ -14,6 +14,7 @@ import java.util.UUID;
 import br.com.colheitacompartilhada.IntegracaoTest;
 import br.com.colheitacompartilhada.usuario.ContaDeTeste;
 import br.com.colheitacompartilhada.usuario.Usuario;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,13 @@ class ContatoTest extends IntegracaoTest {
         dono = cenario.anunciante();
         anuncio = cenario.doacaoDeFrutas(dono);
         interessado = ContaDeTeste.entrar(mvc, ContaDeTeste.cadastrar(mvc));
+    }
+
+    // Estes testes deixam anúncios vencidos e ainda ATIVOS; sem limpar, o ColheitaApplicationTest (que espera
+    // zero anúncios a expirar) falha dependendo da ordem em que as classes rodam.
+    @AfterEach
+    void limparDepois() {
+        cenario.limparAnuncios();
     }
 
     @Test

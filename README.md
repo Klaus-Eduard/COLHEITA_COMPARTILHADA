@@ -32,7 +32,7 @@ Todo merge na `main` com CI verde é publicado automaticamente no Render. O pass
 Veja [`.env.example`](.env.example) e `docs/specs/05_ARQUITETURA.md` §7.
 
 ## Dados de demonstração (apresentação)
-Com `SPRING_PROFILES_ACTIVE=demo` e `DEMO_PASSWORD` (8 a 72 caracteres) definidos, o app cria na subida 2 usuários fictícios (`maria.demo@exemplo.com` e `joao.demo@exemplo.com`, ambos com essa senha) e 6 anúncios com fotos geradas pelo próprio código. Só carrega se não houver anúncio ativo no prazo e nunca impede o app de subir. Os dados de inspeção sanitária são fictícios e aparecem assim. A conta de moderação vem de `ADMIN_EMAIL` e `ADMIN_PASSWORD`. O roteiro completo de preparo da apresentação está em `docs/producao/PREPARO-APRESENTACAO.md`.
+Com `SPRING_PROFILES_ACTIVE=demo` e `DEMO_PASSWORD` (8 a 72 caracteres) definidos, o app cria na subida 2 usuários fictícios (`maria.demo@exemplo.com` e `joao.demo@exemplo.com`, ambos com essa senha) e 15 anúncios variados (9 com fotos geradas pelo próprio código). Só carrega se a conta `maria.demo@exemplo.com` ainda não tiver anúncio ativo no prazo (anúncios de teste de outras pessoas não atrapalham) e nunca impede o app de subir. Os dados de inspeção sanitária são fictícios e aparecem assim. A conta de moderação vem de `ADMIN_EMAIL` e `ADMIN_PASSWORD`. O roteiro completo de preparo da apresentação está em `docs/producao/PREPARO-APRESENTACAO.md`.
 
 ## Fluxo de trabalho
 Branches `main`, `klaus`, `luan` e `isabele`. Um PR por issue, com revisão de um colega e CI verde. Detalhes em `docs/specs/08_PLANO_DE_ENTREGAS.md` §4.

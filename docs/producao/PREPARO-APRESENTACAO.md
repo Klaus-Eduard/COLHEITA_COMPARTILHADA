@@ -12,7 +12,7 @@ Evidências: preencher `docs/evidencias/T10-producao.md` e guardar prints e logs
 | Variáveis no Render (perfil demo, administrador) | Acesso ao painel do Render | Quem for o dono da conta do projeto |
 | Backup e restauração | Docker instalado e a connection string do Neon | Quem tiver Docker |
 | Testes de redeploy e de cold start | A URL pública e um usuário de demonstração | Qualquer integrante |
-| Enviar URL e credenciais ao professor | Os dados de acesso | Combinar no grupo |
+| Enviar a URL ao professor | O endereço do site (ele cria a própria conta) | Combinar no grupo |
 
 Depois de cada passo, **anote a evidência** em `docs/evidencias/T10-producao.md`.
 
@@ -29,7 +29,7 @@ Com o perfil `demo`, a aplicação cria, na subida, usuários e anúncios **fict
 
 A **senha dos dois é o valor de `DEMO_PASSWORD`**. Os dois já têm WhatsApp fictício e autorização de contato, então podem publicar.
 
-Seis anúncios, com prazo de 5 a 7 dias a partir de hoje: laranjas do quintal (doação, Garcia), limão tahiti, alface crespa (venda "a combinar"), mandioca fresca (doação), ovos caipiras e mel de laranjeira (com origem, inspeção e validade). **Quatro têm foto.** A doação de frutas no Garcia serve para a tarefa 1 do teste de usabilidade.
+Quinze anúncios (8 da Maria e 7 do João), com prazo de 5 a 7 dias a partir de hoje: frutas, verduras e legumes, ovos e mel, entre doações e vendas (alguns com preço "a combinar"). Ovos e mel têm origem, inspeção fictícia e validade. **Nove têm foto.** O primeiro é a doação de laranjas no Garcia e serve para a tarefa 1 do teste de usabilidade.
 
 **Quando ele roda:** só se **não existir nenhum anúncio ativo e dentro do prazo**. Por isso:
 
@@ -50,7 +50,7 @@ Se `DEMO_PASSWORD` estiver vazia ou fora de 8 a 72 caracteres, ele **não carreg
 
 Depois de salvar, o Render faz um novo deploy sozinho. **Conferir nos logs do Render** uma destas linhas:
 
-- `Dados de demonstração carregados: 6 anúncios` (deu certo);
+- `Dados de demonstração carregados. Anúncios criados: 15` (deu certo);
 - `Já existem anúncios ativos: dados de demonstração não carregados` (já havia anúncios ativos);
 - `... DEMO_PASSWORD não tem de 8 a 72 caracteres ...` (corrigir a variável).
 
@@ -136,9 +136,11 @@ docker run --rm postgres:16 psql "postgresql://USUARIO:SENHA@HOST_DA_BRANCH_DE_T
 - Salve em `docs/evidencias/` um print (ou o texto copiado) das duas contagens e da conferência das chaves. **Cuidado:** apague qualquer senha ou host que apareça nele antes de guardar.
 - Apague o arquivo `.dump` e, se quiser, a branch `restore-teste` do Neon.
 
-## 6. Enviar a URL e as credenciais ao professor
+## 6. Enviar a URL ao professor
 
-**Canal restrito:** e-mail direto ou mensagem privada. **Nunca** no Git, no README, em uma issue, em um pull request ou em um print público.
+O professor **cria a própria conta** pelo site durante a avaliação, então **não é preciso criar nem enviar conta de usuário comum**. As contas Maria e João do perfil `demo` servem só para o site já abrir com anúncios; não as envie.
+
+**Canal:** e-mail direto ou mensagem privada. A URL pode ir por qualquer canal, mas **nunca** coloque senhas no Git, no README, em uma issue, em um pull request ou em um print público.
 
 Modelo de mensagem:
 
@@ -147,8 +149,8 @@ Modelo de mensagem:
 > Professor Everton, segue o acesso ao sistema:
 >
 > - Endereço: https://colheita-compartilhada.onrender.com
-> - **Administrador (moderação):** e-mail `_______`, senha `_______`
-> - **Usuário comum:** e-mail `_______`, senha `_______`
+> - Para testar, crie uma conta em "Cadastrar". Todos os dados do sistema são fictícios.
+> - *(Opcional, só se o professor quiser ver a tela de moderação)* **Administrador:** e-mail `_______`, senha `_______`. Envie por canal restrito, em mensagem separada.
 >
 > O primeiro acesso depois de um tempo parado pode levar cerca de 1 minuto, porque o plano gratuito hiberna. Todos os dados do sistema são fictícios.
 >
@@ -156,7 +158,7 @@ Modelo de mensagem:
 
 Também conferir (`08` §6.2): o repositório continua privado e o professor está como **colaborador**.
 
-Depois da avaliação, **troque as senhas** de demonstração.
+Depois da avaliação, **troque a senha** do administrador (e as de demonstração, se tiverem sido divulgadas).
 
 ## 7. No dia da apresentação
 
@@ -171,5 +173,5 @@ Depois da avaliação, **troque as senhas** de demonstração.
 - [ ] Redeploy mantém dados e fotos (seção 2).
 - [ ] Cold start funciona (seção 4).
 - [ ] Backup feito e restauração ensaiada (seção 5).
-- [ ] URL e credenciais enviadas ao professor por canal restrito (seção 6).
+- [ ] URL enviada ao professor (seção 6); credenciais só se ele pediu a moderação.
 - [ ] Nenhum segredo no histórico do Git: procurar por `password` e `DB_` antes da entrega.

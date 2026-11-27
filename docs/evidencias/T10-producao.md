@@ -64,7 +64,8 @@ Preencher depois de cada teste do roteiro `docs/producao/PREPARO-APRESENTACAO.md
 
 | Item | Resultado |
 |---|---|
-| URL e credenciais (administrador e usuário comum) enviadas por canal restrito | sim / não |
+| URL enviada ao professor (ele cria a própria conta) | sim / não |
+| Credenciais do administrador enviadas por canal restrito, se ele pediu a moderação | sim / não / não se aplica |
 | Canal usado (e-mail, mensagem privada) | |
 | Data e hora do envio | |
 | Professor é colaborador do repositório privado | sim / não |
